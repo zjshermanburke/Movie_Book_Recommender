@@ -34,7 +34,7 @@ The purpose of this project is to build a library in C++ which stores list of bo
 
 ## About The Project
 
-Building a basic neural network in C++ using the PyTorch C++ API
+The project will utilize C++ to build out an application for handling the creation and addition of user movie and book libraries. The data will then be stored in a SQL database to add to later or pull data from for use in fine-tunining an LLM. The libraries will then be used to fine-tune an LLM to provide movie or book recommendations tailored to users preferences. 
 
 ### Built With
 * [![PyTorch][PyTorch.org]][PyTorch-url]
