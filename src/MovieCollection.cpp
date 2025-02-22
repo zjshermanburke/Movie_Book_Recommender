@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MovieCollection.h"
+#include "../include/MovieCollection.h"
 
 // Constructor
 MovieCollection::MovieCollection(){
@@ -23,7 +23,7 @@ bool MovieCollection::add_movie(std::string title, std::string mpa_rating, int t
     }
   }
   // Create temporary movie object
-  Movie temp {title, mpa_rating, times_watched, rating};
+  Movie temp {title, times_watched, rating, mpa_rating};
   if ((*movies).empty()){
     (*movies).insert((*movies).begin(), temp);
   }
@@ -44,7 +44,7 @@ bool MovieCollection::add_movie(std::string title, std::string mpa_rating, int t
 bool MovieCollection::increment_watched(std::string title){
     for (Movie &movie : *movies){
         if (movie.get_title() == title){
-            movie.increment_watched();
+            movie.increment_times_consumed();
             return true;
         }
     }

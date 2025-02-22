@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MovieCollection.h"
+#include "../include/MovieCollection.h"
 
 using namespace std;
 
@@ -41,6 +41,8 @@ int main(){
     my_movies.add_movie("Django", "R", 15, 4); // Should return false
     my_movies.display();
     my_movies.add_movie("Zoolander", "M", 1, 5);
+    my_movies.display();
+    my_movies.add_movie("Apples", "PG-13", 0, 5);
     my_movies.display();
 
     MovieCollection my_movies_deep_copy{my_movies}; // Calls the deep copy constructor
