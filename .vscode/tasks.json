@@ -9,16 +9,17 @@
                 "-g",
                 "${workspaceFolder}/src/*.cpp",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}",
+                "${workspaceFolder}/build/main",
                 "-I",
                 "${workspaceFolder}/include"
             ],
             "options": {
                 "cwd": "${fileDirname}"
             },
-            "problemMatcher": [
-                "$g++"
-            ],
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": "absolute"
+        },
             "group": {
                 "kind": "build",
                 "isDefault": true
