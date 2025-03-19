@@ -11,7 +11,9 @@
                 "-o",
                 "${workspaceFolder}/build/main",
                 "-I",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include",
+                "-lpqxx",
+                "-lpq"
             ],
             "options": {
                 "cwd": "${fileDirname}"

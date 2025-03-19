@@ -1,11 +1,45 @@
 #include <iostream>
+#include <pqxx/pqxx>
 #include "../include/MovieCollection.h"
 #include "../include/BookCollection.h"
 #include "../include/Util.h"
 
 using namespace std;
+using namespace pqxx;
+
+class databaseConnection
+{
+public:
+    pqxx::connection* conn;
+    void SetConnection(){
+        conn=new pqxx::connection(
+            "dbname=movie_book_database"
+            "user=postgres"
+            "host=localhost"
+            "password=password"
+            "port=5432");
+
+    }
+
+    void Disconnect(){
+        conn->close();
+    }
+
+    pqxx::result query(std::string strSQL){
+        //SetConnection();
+        pqxx::work trans(*conn,"trans");
+
+        pqxx::result res=trans.exec(strSQL);
+
+        trans.commit();
+        return res;
+    }
+};
 
 int main(){
+    databaseConnection database;
+    database.SetConnection();
+
     MovieCollection my_movies;
     my_movies.display(); // Displaying empty library should return message
 
