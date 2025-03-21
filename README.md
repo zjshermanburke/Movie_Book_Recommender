@@ -37,8 +37,10 @@ The purpose of this project is to build a library in C++ which stores list of bo
 The project will utilize C++ to build out an application for handling the creation and addition of user movie and book libraries. The data will then be stored in a SQL database to add to later or pull data from for use in fine-tunining an LLM. The libraries will then be used to fine-tune an LLM to provide movie or book recommendations tailored to users preferences. 
 
 ### Built With
-* [![PyTorch][PyTorch.org]][PyTorch-url]
+* [![Python][Python.org]][Python-url]
 * [![C++][Cplusplus.com]][Cplusplus-url]
+* [![PyTorch][PyTorch.org]][PyTorch-url]
+* [![PostgreSQL][Postgresql.org]][PostgreSQL-url]
 
 ## Getting Started
 
@@ -46,6 +48,7 @@ The project will utilize C++ to build out an application for handling the creati
 
 Required Libraries/Frameworks: <br>
 C++ compiler (GNU C++17 was used for this project)
+[Libpqxx](https://github.com/jtv/libpqxx)
 
 Required Hardware: <br>
 NVidia GPU (once LLM has been implemented)
@@ -66,8 +69,8 @@ TBD still in progress
 ## Features
 - [x] Build Movie Library
 - [x] Build Book Library
-- [ ] Build Data Loader and Saver in C++ (Using Postgres)
-- [ ] Build Python Postgres Data Loader 
+- [ ] Build Data Loader and Saver in C++ (Using PostgreSQL)
+- [ ] Build Python PostgreSQL Data Loader 
 - [ ] Determine which LLM recommender model to utilize
 - [ ] Build dataloader based on LLM in Python
 - [ ] Create Jupyter notebook to handle fine-tuning in Python
@@ -109,10 +112,15 @@ Project Link: [https://github.com/zjshermanburke/TransferLearning_VGG19](https:/
 
 
 <!-- Built With Badges -->
+[Cplusplus.com]: https://img.shields.io/badge/C++-00599C?style=flat-square&logo=C%2B%2B&logoColor=white
+[Cplusplus-url]: https://cplusplus.com/
+
+[Python.org]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
+[Python-url]: https://python.org/
 
 <!-- [HuggingFace.com]: https://img.shields.io/badge/%F0%9F%A4%97Hugging_Face-ffd21e -->
 [PyTorch.org]: https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white
 [PyTorch-url]: https://pytorch.org/
 
-[Cplusplus.com]: https://img.shields.io/badge/C++-00599C?style=flat-square&logo=C%2B%2B&logoColor=white
-[Cplusplus-url]: https://cplusplus.com/
+[PostgresSQL.org]: https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white
+[PostgresSQL-url]: https://www.postgresql.org/
