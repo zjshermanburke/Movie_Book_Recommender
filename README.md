@@ -40,7 +40,7 @@ The project will utilize C++ to build out an application for handling the creati
 * [![Python][Python.org]][Python-url]
 * [![C++][Cplusplus.com]][Cplusplus-url]
 * [![PyTorch][PyTorch.org]][PyTorch-url]
-* [![PostgreSQL][Postgresql.org]][PostgreSQL-url]
+* [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
 
 ## Getting Started
 
