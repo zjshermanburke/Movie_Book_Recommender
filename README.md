@@ -47,7 +47,7 @@ The project will utilize C++ to build out an application for handling the creati
 ### Prerequisites (In current state)
 
 Required Libraries/Frameworks: <br>
-C++ compiler (GNU C++17 was used for this project)
+C++ compiler (GNU C++17 was used for this project)<br>
 [Libpqxx](https://github.com/jtv/libpqxx)
 
 Required Hardware: <br>
