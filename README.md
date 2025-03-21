@@ -66,9 +66,10 @@ TBD still in progress
 ## Features
 - [x] Build Movie Library
 - [x] Build Book Library
-- [ ] Build Data Loader and Saver in C++ (initially will use JSON then convert to SQL)
+- [ ] Build Data Loader and Saver in C++ (Using Postgres)
+- [ ] Build Python Postgres Data Loader 
 - [ ] Determine which LLM recommender model to utilize
-- [ ] Build Data Loader based on LLM in Python
+- [ ] Build dataloader based on LLM in Python
 - [ ] Create Jupyter notebook to handle fine-tuning in Python
 - [ ] Implment user feedback functionality for LLM
 
