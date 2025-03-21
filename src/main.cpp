@@ -1,86 +1,41 @@
 #include <iostream>
+#include <string>
 #include <pqxx/pqxx>
-#include "../include/MovieCollection.h"
-#include "../include/BookCollection.h"
-#include "../include/Util.h"
+#include "../include/DataBaseConnection.h"
+#include "../test/SimpleTest.cpp"
 
 using namespace std;
-using namespace pqxx;
 
-class databaseConnection
-{
-public:
-    pqxx::connection* conn;
-    void SetConnection(){
-        conn=new pqxx::connection(
-            "dbname=movie_book_database"
-            "user=postgres"
-            "host=localhost"
-            "password=password"
-            "port=5432");
-
+void display_query(const pqxx::result &query_result){
+    for (const auto &row: query_result){
+        for (const auto &field:row){
+            std::cout << field.c_str() << "\t";
+        }
+        std::cout << std::endl;
     }
-
-    void Disconnect(){
-        conn->close();
-    }
-
-    pqxx::result query(std::string strSQL){
-        //SetConnection();
-        pqxx::work trans(*conn,"trans");
-
-        pqxx::result res=trans.exec(strSQL);
-
-        trans.commit();
-        return res;
-    }
-};
+}
 
 int main(){
-    databaseConnection database;
-    database.SetConnection();
+    std::string sql_query_file_path = "./sql_files/TestQuery.sql";
 
-    MovieCollection my_movies;
-    my_movies.display(); // Displaying empty library should return message
+    DataBaseConnection database;
+    database.set_connection();
 
-    add_movie(my_movies, "Star Wars", "PG-13", 3, 4);
-    my_movies.display();
-    add_movie(my_movies, "Django", "R", 2, 5);
+    // string my_string = "SELECT * FROM employees";
+    
+    // pqxx::result result = database.query(my_string);
 
-    my_movies.display(); // Display Django 2 times watched
-    increment_watched(my_movies, "Django");
-    my_movies.display(); // Display Django 3 times watched
+    std::string sql_query = database.load_sql_query(sql_query_file_path);
 
-    increment_watched(my_movies, "Rocky"); // Should return false
-    add_movie(my_movies, "Django", "R", 15, 4); // Should return false
-    my_movies.display();
-    add_movie(my_movies, "Zoolander", "M", 1, 5);
-    my_movies.display();
-    add_movie(my_movies, "Apples", "PG-13", 0, 5);
-    my_movies.display();
+    pqxx::result query_result = database.query(sql_query);
+    
+    display_query(query_result);
+    
+    
 
-    MovieCollection my_movies_deep_copy{my_movies}; // Calls the deep copy constructor
+    // simplified_test();
 
-    //std::string title, int times_read, int user_rating, std::string isbn, std::string genre, std::string sub_genre
-    BookCollection my_books;
-    my_books.display(); // Displaying empty library should return message
-
-    add_book(my_books, "C++ Programming Language", 3, 5, "978-0321958327", "Non-fiction", "Instructional", "Bjarne Stroustrup");
-    my_books.display();
-    add_book(my_books, "Paradise Lost", 1, 4, "978-0140424393", "Fiction", "Epic Poem", "John Milton");
-
-    my_books.display(); // Display Test_Book2 0 times watched
-    increment_read(my_books, "Paradise Lost");
-    my_books.display(); // Display Test_Book2 1 times watched
-
-    increment_read(my_books, "Test_Book6"); // Should return false
-    add_book(my_books, "The C Programming Language", 0, 5, "978-0131103627", "Non-fictional", "Instructional", "Brian W. Kernighan");
-    my_books.display();
-    add_book(my_books, "1984", 0, 2, "978-6257287401", "Fiction", "Dystopian Fiction","George Orwell");
-    my_books.display();
-
-    BookCollection my_books_deep_copy{my_books}; // Calls the deep copy constructor
-
+    database.disconnect();
     
     return 0;
 }

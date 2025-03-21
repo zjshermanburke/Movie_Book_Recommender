@@ -7,5 +7,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(main main.cpp)
 
+# find_package(PostgreSQL REQUIRED)
+
+# target_link_libraries(main PRIVATE PostgreSQL::PostgreSQL)
+
 # find_package(libpqxx REQUIRED)
 # target_link_libraries(main -lpqxx -lpq)
