@@ -6,14 +6,20 @@
 
 class MovieCollection{
 private:
+  std::string name;
   std::vector<Movie> *movies;
 public:
   // Constructor
-  MovieCollection();
+  MovieCollection(std::string name);
   // Copy Constructor
   MovieCollection(const MovieCollection &source);
   // Destructor
   ~MovieCollection();
+
+  // Getters and Setters
+  std::vector<Movie> get_movies() const;
+  std::string get_name() const;
+  void set_name(std::string name);
 
   // Check if movie exist in collection, if it doesn't add it
   bool add_movie(std::string title, std::string mpa_rating, int times_watched, int rating);

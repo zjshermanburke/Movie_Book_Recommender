@@ -2,18 +2,32 @@
 #include "../include/MovieCollection.h"
 
 // Constructor
-MovieCollection::MovieCollection(){
+MovieCollection::MovieCollection(std::string name){
+  this->name = name;
   movies = new std::vector<Movie>;
 }
 // Deep Copy Constructor
 MovieCollection::MovieCollection(const MovieCollection &source)
-: movies{nullptr}{
+: movies{nullptr}, name{source.name}{
   movies = new std::vector<Movie>{*(source.movies)};
 }
 // Destructor
 MovieCollection::~MovieCollection(){
   delete movies;
 }
+
+// Getters and Setters
+std::vector<Movie> MovieCollection::get_movies() const{
+  return *movies;
+}
+std::string MovieCollection::get_name() const{
+  return this->name;
+}
+void MovieCollection::set_name(std::string name){
+  this->name = name;
+}
+
+
 // Add movie to collection
 bool MovieCollection::add_movie(std::string title, std::string mpa_rating, int times_watched, int rating){
   // If movie is in collection, return false

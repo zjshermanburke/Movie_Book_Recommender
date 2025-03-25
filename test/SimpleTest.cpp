@@ -5,7 +5,7 @@
 
 void simplified_test(){
 
-    MovieCollection my_movies;
+    MovieCollection my_movies("Movie Collection");
     my_movies.display(); // Displaying empty library should return message
 
     add_movie(my_movies, "Star Wars", "PG-13", 3, 4);
@@ -27,7 +27,7 @@ void simplified_test(){
     MovieCollection my_movies_deep_copy{my_movies}; // Calls the deep copy constructor
 
     //std::string title, int times_read, int user_rating, std::string isbn, std::string genre, std::string sub_genre
-    BookCollection my_books;
+    BookCollection my_books("Test Collection");
     my_books.display(); // Displaying empty library should return message
 
     add_book(my_books, "C++ Programming Language", 3, 5, "978-0321958327", "Non-fiction", "Instructional", "Bjarne Stroustrup");
