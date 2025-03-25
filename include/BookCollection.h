@@ -6,14 +6,20 @@
 
 class BookCollection{
 private:
+  std::string name;
   std::vector<Book> *books;
 public:
   // Constructor
-  BookCollection();
+  BookCollection(std::string name);
   // Copy Constructor
   BookCollection(const BookCollection &source);
   // Destructor
   ~BookCollection();
+
+  // Getters and Setters
+  std::vector<Book> get_books() const;
+  std::string get_name() const;
+  void set_name(std::string name);
 
   // Check if book exist in collection, if it doesn't add it
   bool add_book(std::string title, int times_read, int user_rating, 
