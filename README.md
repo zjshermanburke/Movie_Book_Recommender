@@ -122,5 +122,5 @@ Project Link: [https://github.com/zjshermanburke/TransferLearning_VGG19](https:/
 [PyTorch.org]: https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white
 [PyTorch-url]: https://pytorch.org/
 
-[PostgresSQL.org]: https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white
-[PostgresSQL-url]: https://postgresql.org/
+[PostgreSQL.org]: https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white
+[PostgreSQL-url]: https://postgresql.org/
