@@ -1,5 +1,0 @@
--- Purpose of this file is to test that .txt files will query correctly
-SELECT
-    *
-FROM
-    employees

@@ -7,11 +7,11 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/src/*.cpp",
+                "${workspaceFolder}/librarybuilder/src/*.cpp",
                 "-o",
-                "${workspaceFolder}/build/main",
+                "${workspaceFolder}/librarybuilder/build/main",
                 "-I",
-                "${workspaceFolder}/include",
+                "${workspaceFolder}/librarybuilder/include",
                 "-lpqxx",
                 "-lpq"
             ],
