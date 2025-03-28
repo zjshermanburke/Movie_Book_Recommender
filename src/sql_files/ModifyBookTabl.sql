@@ -1,2 +1,0 @@
-INSERT INTO insert_table_name (title, times_read, user_rating, genre, sub_genre, author, isbn)
-VALUES ('insert_title', insert_times_read, insert_user_rating, 'insert_genre', 'insert_sub_genre', 'insert_author', 'insert_isbn13')
