@@ -11,8 +11,10 @@ protected:
     int times_consumed;
     int user_rating;
 public:
-    // Consturtors Movie
+    // Constructors
     Media(std::string title, int times_consumed=def_times_consumed, int user_rating=def_user_rating);
+
+    // Operator Overloading 
     bool operator==(const Media &rhs) const;
     bool operator<(const Media &rhs) const;
     bool operator>(const Media &rhs) const;
@@ -28,4 +30,5 @@ public:
     // Custom Methods
     void increment_times_consumed(); // Increment number of times consumed
 };
+
 #endif //_MEDIA_H_

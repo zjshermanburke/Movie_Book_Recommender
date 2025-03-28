@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 #include "Book.h"
+#include "MediaCollection.h"
 
-class BookCollection{
+class BookCollection: public MediaCollection{
 private:
-  std::string name;
   std::vector<Book> *books;
 public:
   // Constructor
@@ -18,8 +18,6 @@ public:
 
   // Getters and Setters
   std::vector<Book> get_books() const;
-  std::string get_name() const;
-  void set_name(std::string name);
 
   // Check if book exist in collection, if it doesn't add it
   bool add_book(std::string title, int times_read, int user_rating, 
@@ -27,7 +25,7 @@ public:
   // If book exists, increment times watched
   bool increment_read(std::string book);
   // Display's Book collection
-  void display() const;
+  virtual void display() const override;
 };
 
 #endif // _BOOKCOLLECTION_H_

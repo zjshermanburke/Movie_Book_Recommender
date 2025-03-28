@@ -11,6 +11,7 @@ private:
   static constexpr const char *def_string_val = "N/A";
   static constexpr const char *def_author = "Unknown";
 protected:
+  // Attributes specific to a book
   std::string isbn13;
   std::string genre;
   std::string sub_genre;
@@ -35,7 +36,7 @@ public:
   void set_author(std::string author);
 
   // Custom Methods
-  void increment_read(){Media::increment_times_consumed();}
+  void increment_read(){Media::increment_times_consumed();} // Wrapper method to provide more intuitive naming
   void display() const; // Display Book Information
   };
 

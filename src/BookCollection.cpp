@@ -2,13 +2,13 @@
 #include "../include/BookCollection.h"
 
 // Constructor
-BookCollection::BookCollection(std::string name){
-  this->name = name;
+BookCollection::BookCollection(std::string name)
+: MediaCollection{name} {
   books = new std::vector<Book>;
 }
 // Deep Copy Constructor
 BookCollection::BookCollection(const BookCollection &source)
-: books{nullptr}, name{source.name}{
+: MediaCollection{source.name}, books{nullptr}{
   books = new std::vector<Book>{*(source.books)};
 }
 // Destructor
@@ -19,12 +19,6 @@ BookCollection::~BookCollection(){
 // Getters and Setters
 std::vector<Book> BookCollection::get_books() const{
   return *books;
-}
-std::string BookCollection::get_name() const{
-  return this->name;
-}
-void BookCollection::set_name(std::string name){
-  this->name = name;
 }
 
 // Add movie to collection

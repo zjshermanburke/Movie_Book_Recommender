@@ -2,13 +2,13 @@
 #include "../include/MovieCollection.h"
 
 // Constructor
-MovieCollection::MovieCollection(std::string name){
-  this->name = name;
+MovieCollection::MovieCollection(std::string name)
+: MediaCollection{name}{
   movies = new std::vector<Movie>;
 }
 // Deep Copy Constructor
 MovieCollection::MovieCollection(const MovieCollection &source)
-: movies{nullptr}, name{source.name}{
+: MediaCollection{source.get_name()}, movies{nullptr}{
   movies = new std::vector<Movie>{*(source.movies)};
 }
 // Destructor
@@ -20,13 +20,6 @@ MovieCollection::~MovieCollection(){
 std::vector<Movie> MovieCollection::get_movies() const{
   return *movies;
 }
-std::string MovieCollection::get_name() const{
-  return this->name;
-}
-void MovieCollection::set_name(std::string name){
-  this->name = name;
-}
-
 
 // Add movie to collection
 bool MovieCollection::add_movie(std::string title, std::string mpa_rating, int times_watched, int rating){

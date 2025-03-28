@@ -1,8 +1,9 @@
 #include <iostream>
 #include "../include/MovieCollection.h"
 #include "../include/Util.h"
+#include "../include/SQLQueryUtil.h"
 
-void movie_functionality_test(){
+void movie_functionality_test(DataBaseConnection &database){
 
     MovieCollection my_movies("movie_collection");
     my_movies.display(); // Displaying empty library should return message
@@ -29,4 +30,6 @@ void movie_functionality_test(){
 
     std::cout << "Original Movie Collection Name: " << my_movies.get_name() << std::endl;
     std::cout << "Deep Copy Movie Collection Name: " << my_movies_deep_copy.get_name() << std::endl;
+
+    create_table(database, my_movies);
 }

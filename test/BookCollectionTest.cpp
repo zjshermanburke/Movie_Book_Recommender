@@ -6,7 +6,7 @@
 void book_functionality_test(DataBaseConnection &database){
 
     //std::string title, int times_read, int user_rating, std::string isbn, std::string genre, std::string sub_genre
-    BookCollection my_books("Test Collection");
+    BookCollection my_books("Book Collection");
     my_books.display(); // Displaying empty library should return message
 
     add_book(my_books, "C++ Programming Language", 3, 5, "978-0321958327", "Non-fiction", "Instructional", "Bjarne Stroustrup");
