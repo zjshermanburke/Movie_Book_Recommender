@@ -1,9 +1,9 @@
 #include <string>
 #include <iostream>
-#include <regex>
 #include <pqxx/pqxx>
-#include <algorithm>
 #include "../include/SQLQueryUtil.h"
+
+
 
 void add_row(DataBaseConnection &database, const Movie &movie, std::string table_name){
     // Getting movie features to add to database
@@ -40,6 +40,7 @@ void add_row(DataBaseConnection &database, const Book &book, std::string table_n
     database.query(query_string);
 }
 
+
 void create_table(DataBaseConnection &database, const MovieCollection &moviecollection){
     // Remove spaces for table name
     std::string name = moviecollection.get_name();
@@ -55,6 +56,7 @@ void create_table(DataBaseConnection &database, const MovieCollection &moviecoll
     }
 }
 
+
 void create_table(DataBaseConnection &database, const BookCollection &bookcollection){
     // Remove spaces for table name
     std::string name = bookcollection.get_name();
@@ -68,4 +70,45 @@ void create_table(DataBaseConnection &database, const BookCollection &bookcollec
     for (const Book &book : bookcollection.get_books()){
         add_row(database, book, name);
     }
+}
+
+void delete_row(DataBaseConnection &database, std::string table_name, std::string title){
+    // Query to delete row from table
+    std::string delete_query = "DELETE FROM " + table_name + " WHERE title ='" + title + "'";
+}
+
+
+MovieCollection load_movie_collection(DataBaseConnection &database, std::string table_name){
+    MovieCollection *collection = new MovieCollection(table_name);
+    std::string sql_query = "SELECT * FROM " + table_name + ";";
+    pqxx::result query_result = database.query(sql_query);
+    // Check if table formatting matches expected formatting for movie table
+    if (query_result[0].size() != 4){
+        throw std::string("Table does not match expected book or movie table format");
+    }
+    // For each row in the SQL table, create a movie object and add to the MovieCollection
+    for (const auto &row: query_result){
+        (*collection).add_movie(row[0].as<std::string>(), row[3].as<std::string>(), row[1].as<int>(), row[2].as<int>());
+    }
+
+    return *collection;
+}
+
+BookCollection load_book_collection(DataBaseConnection &database, std::string table_name){
+    BookCollection *collection = new BookCollection(table_name);
+    std::string sql_query = "SELECT * FROM " + table_name + ";";
+    pqxx::result query_result = database.query(sql_query);
+
+    // Check if table formatting matches expected formatting for book table
+    if (query_result[0].size() != 7){
+        throw std::string("Table does not match expected book or movie table format");
+    }
+        
+    // For each row in the SQL table, create a book object and add to the BookCollection
+    for (const auto &row: query_result){
+        collection->add_book(row[0].as<std::string>(), row[1].as<int>(), row[2].as<int>(), 
+        row[6].as<std::string>(), row[3].as<std::string>(), row[4].as<std::string>(), row[5].as<std::string>());
+    }
+
+    return *collection;
 }

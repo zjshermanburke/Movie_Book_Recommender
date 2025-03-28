@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string>
 #include <pqxx/pqxx>
-#include <regex>
 #include "../include/DataBaseConnection.h"
 // Test Files
 #include "../test/SimpleTest.cpp"
 #include "../test/BookCollectionTest.cpp"
 #include "../test/MovieCollectionTest.cpp"
+#include "../test/CollectionLoadingTest.cpp"
 
 using namespace std;
 
@@ -26,11 +26,8 @@ int main(){
 
     // book_functionality_test(database);
 
-    std::string sql_query = "SELECT * FROM testcollection";
-
-    pqxx::result query_result = database.query(sql_query);
-    
-    display_query(query_result);
+    movie_loading(database, "movie_collection");
+    book_loading(database, "bookcollection");
 
     database.disconnect();
     

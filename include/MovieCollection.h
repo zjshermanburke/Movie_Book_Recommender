@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 #include "Movie.h"
+#include "MediaCollection.h"
 
-class MovieCollection{
+class MovieCollection: public MediaCollection{
 private:
-  std::string name;
   std::vector<Movie> *movies;
 public:
   // Constructor
@@ -18,15 +18,13 @@ public:
 
   // Getters and Setters
   std::vector<Movie> get_movies() const;
-  std::string get_name() const;
-  void set_name(std::string name);
 
   // Check if movie exist in collection, if it doesn't add it
   bool add_movie(std::string title, std::string mpa_rating, int times_watched, int rating);
   // If movie exists, increment times watched
   bool increment_watched(std::string movie);
   // Display's Movie collection
-  void display() const;
+  virtual void display() const override;
 }; 
 
 #endif // _MOVIECOLLECTION_H_
