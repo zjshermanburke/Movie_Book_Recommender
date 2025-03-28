@@ -69,7 +69,7 @@ TBD still in progress
 ## Features
 - [x] Build Movie Library
 - [x] Build Book Library
-- [ ] Build Data Loader and Saver in C++ (Using PostgreSQL)
+- [x] Build Data Loader and Saver in C++ (Using PostgreSQL)
 - [ ] Build Python PostgreSQL Data Loader 
 - [ ] Determine which LLM recommender model to utilize
 - [ ] Build dataloader based on LLM in Python
