@@ -123,6 +123,5 @@ def data_preprocessing(title_basics_url:str, ratings_basics_url:str, crew_url, l
 
     # Combine DataFrames into a single DataFrame for lookup and training 
     combined_df = combine_dataframe(movie_df, ratings_df, crew_df)
-    return combined_df
-
+    
     return combined_df
