@@ -57,28 +57,60 @@ def lookup_people(crew_df:pl.DataFrame, lookup_df:pl.DataFrame, save_file:bool=F
     pl.DataFrame: DataFrame of writers and directors names with associated movie unique IDs
   """
 
-  # Create a dictionary of unique identifiers and name of person
-  lookup_dict = dict(zip(lookup_df['nconst'], lookup_df['primaryName']))
-  # Creating a list of crew unique IDs from the comma separated string
-  crew_df = crew_df.with_columns(
-    pl.col("writers").str.split(",").alias("writersList"))
-  # Mapping crew names to crew unique IDs
-  crew_df = crew_df.with_columns(
-    pl.col("writersList").list.eval(
-        pl.element().map_elements(lambda x: lookup_dict.get(x, "\\N"), return_dtype=pl.Utf8)
-    ).alias("writerNames")
-  )
-  
-  if (save_file == True):
-    # If we want to save to a csv file, we need to convert the writerNames list to a string
-    crew_df = crew_df.with_columns(
-    pl.col("writerNames").map_elements(lambda x: ",".join(map(str, x)), return_dtype=pl.Utf8).alias("writers")
-    )
-    # crew_df_save = crew_df.drop("writerNames")
-    crew_df.drop("writerNames").write_csv("crew_df_filtered.csv")
-  
+  # Create a list of writers from the string of writers
+  crew_df = (crew_df.with_columns(
+    pl.col("writers").str.split(",")
+    ))
+  # Create a list of directors from the string of writers
+  crew_df = (crew_df.with_columns(
+      pl.col("directors").str.split(",")
+  ))
+
+  # Replacing unique IDs of writers and directors to names
+  crew_df = map_names(crew_df, lookup_df, "writers")
+  crew_df = map_names(crew_df, lookup_df, "directors")
+
   return crew_df
+
+def map_names(crew_df:pl.DataFrame, lookup_df:pl.DataFrame, list_to_map:str):
+  """
+   Performs a mapping of the unique identifiers for the directors or writers to the name of the person
+   Args:
+    crew_df (pl.DataFrame): DataFrame of the crew to perform the mapping in
+    lookup_df (pl.DataFrame): DataFrame containing lookup information for directors and writers
+    list_to_map (str): The string of the column to map
+   Returns:
+    pl.DataFrame: DataFrame of containing a list of the names of the given crew category
+  """
+  if (list_to_map == "directors"):
+    alt_column = 'writers'
+  else:
+    alt_column = 'directors'
+
+  mapped_df = (crew_df
+        .lazy()
+        .explode(list_to_map)
+        .join(
+            lookup_df
+            .lazy()
+            .select('nconst', 'primaryName'),
+            left_on=list_to_map,
+            right_on='nconst',
+            how='left'
+        )
+        .group_by(['tconst', alt_column])
+        .agg(
+            pl.col(list_to_map),
+            pl.col('primaryName')
+        )
+        .drop(list_to_map)
+        .rename({'primaryName':list_to_map})
+        .sort('tconst')
+        .collect()
+    )
   
+  return mapped_df
+
 def combine_dataframe(movie_df:pl.DataFrame, ratings_df:pl.DataFrame, crew_df:pl.DataFrame):
   """
   Combines DataFrames into a single DataFrame using unique movie identifier
@@ -111,17 +143,21 @@ def data_preprocessing(title_basics_url:str, ratings_basics_url:str, crew_url, l
     # Filter movie DataFrame
     movie_df = filter_movie_dataframe(movie_df)
 
-    if(os.path.exists("sample_data/crew_df_filtered.csv")):
-      # If crew has already been mapped, load file
-      crew_df = pl.read_csv("sample_data/crew_df_filtered.csv") # Load Data
-      print("crew_df 1: ", crew_df.head())
-    else:
-      # Else map director and writer names
-      crew_df = create_dataframe(crew_url)
-      lookup_df = create_dataframe(lookup_url)
-      crew_df = lookup_people(crew_df, lookup_df)
+    crew_df = create_dataframe(crew_url)
+    lookup_df = create_dataframe(lookup_url)
+    crew_df = lookup_people(crew_df, lookup_df)
 
-    # Combine DataFrames into a single DataFrame for lookup and training 
+    # if(os.path.exists("sample_data/crew_df_filtered.csv")):
+    #   # If crew has already been mapped, load file
+    #   crew_df = pl.read_csv("sample_data/crew_df_filtered.csv") # Load Data
+    #   print("crew_df 1: ", crew_df.head())
+    # else:
+    #   # Else map director and writer names
+    #   crew_df = create_dataframe(crew_url)
+    #   lookup_df = create_dataframe(lookup_url)
+    #   crew_df = lookup_people(crew_df, lookup_df)
+
+    # Combine DataFrames into a single DataFrame for lookup and training
     combined_df = combine_dataframe(movie_df, ratings_df, crew_df)
-    
+
     return combined_df
