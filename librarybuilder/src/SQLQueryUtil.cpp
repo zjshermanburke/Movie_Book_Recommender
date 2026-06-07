@@ -26,33 +26,29 @@ void create_table(DataBaseConnection &database, const BookCollection &bookcollec
 
 void add_row(DataBaseConnection &database, const Movie &movie, const std::string &table_name){
       pqxx::work trans(*database.conn);
-      trans.exec(
+      trans.exec_params(
           "INSERT INTO " + table_name + " (title, times_watched, user_rating, mpa_rating) "
           "VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING",
-          pqxx::params{
             movie.get_title(),
             movie.get_times_watched(),
             movie.get_user_rating(),
             movie.get_mpa_rating()
-          }
       );
       trans.commit();
 }
 
 void add_row(DataBaseConnection &database, const Book &book, const std::string &table_name){
     pqxx::work trans(*database.conn);
-    trans.exec(
+    trans.exec_params(
         "INSERT INTO " + table_name + " (title, times_read, user_rating, genre, sub_genre, author, isbn13) "
         "VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING",
-        pqxx::params{
-            book.get_title(),
-            book.get_times_read(),
-            book.get_user_rating(),
-            book.get_genre(),
-            book.get_sub_genre(),
-            book.get_author(),
-            book.get_isbn()
-        }
+        book.get_title(),
+        book.get_times_read(),
+        book.get_user_rating(),
+        book.get_genre(),
+        book.get_sub_genre(),
+        book.get_author(),
+        book.get_isbn()
     );
     trans.commit();
 }
@@ -60,9 +56,9 @@ void add_row(DataBaseConnection &database, const Book &book, const std::string &
 void delete_row(DataBaseConnection &database, const std::string &table_name, const std::string &title){
     // Query to delete row from table
     pqxx::work trans(*database.conn);
-    trans.exec(  
+    trans.exec_params(  
         "DELETE FROM " + table_name + " WHERE title = $1",
-        pqxx::params{title}
+        title
     );
     trans.commit();
 }
