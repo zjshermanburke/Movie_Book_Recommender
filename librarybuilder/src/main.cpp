@@ -1,12 +1,7 @@
 #include <iostream>
 #include <string>
 #include <pqxx/pqxx>
-#include "../include/DataBaseConnection.h"
-// Test Files
-#include "../test/SimpleTest.cpp"
-#include "../test/BookCollectionTest.cpp"
-#include "../test/MovieCollectionTest.cpp"
-#include "../test/CollectionLoadingTest.cpp"
+#include "DataBaseConnection.h"
 
 using namespace std;
 
@@ -23,11 +18,6 @@ int main(){
 
     DataBaseConnection database;
     database.set_connection();
-
-    // book_functionality_test(database);
-
-    movie_loading(database, "movie_collection");
-    book_loading(database, "bookcollection");
 
     database.disconnect();
     

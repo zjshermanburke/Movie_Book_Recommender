@@ -1,8 +1,9 @@
+#include <algorithm>
 #include <iostream>
-#include "../include/Util.h"
+#include "Util.h"
 // Helper functions
 // Helper fucntion to increment the movie watched count
-void increment_watched(MovieCollection &movies, std::string title){
+void increment_watched(MovieCollection &movies, const std::string &title){
     if (movies.increment_watched(title)){
         std::cout << title << " times watched incremented" << std::endl;
     } else {
@@ -10,7 +11,7 @@ void increment_watched(MovieCollection &movies, std::string title){
     }
 }
 // Helper function to add movie
-void add_movie(MovieCollection &movies, std::string title, std::string mpa_rating, int watched, int rating){
+void add_movie(MovieCollection &movies, const std::string &title, const std::string &mpa_rating, int watched, int rating){
     if (movies.add_movie(title, mpa_rating, watched, rating)){
         std::cout << title << " added to library" << std::endl;
     } else {
@@ -19,7 +20,7 @@ void add_movie(MovieCollection &movies, std::string title, std::string mpa_ratin
 }
 
 // Helper fucntion to increment the movie watched count
-void increment_read(BookCollection &books, std::string title){
+void increment_read(BookCollection &books, const std::string &title){
     if (books.increment_read(title)){
         std::cout << title << " times read incremented" << std::endl;
     } else {
@@ -27,12 +28,27 @@ void increment_read(BookCollection &books, std::string title){
     }
 }
 // Helper function to add movie
-void add_book(BookCollection &books, std::string title, int times_read, int user_rating, 
-    std::string isbn13, std::string genre, std::string sub_genre,
-    std::string author){
+void add_book(BookCollection& books, const std::string &title, int times_read, int user_rating, 
+    const std::string &isbn13, const std::string &genre, const std::string &sub_genre,
+    const std::string &author){
     if (books.add_book(title, times_read, user_rating, isbn13, genre, sub_genre, author)){
         std::cout << title << " added to library" << std::endl;
     } else {
         std::cout << title << " is already in library" << std::endl;
     }
+}
+
+void validate_table_name(const std::string &table_name){
+    for (char c : table_name){
+        if(!std::isalnum(c) && c != '_'){
+            throw std::string("Invalid table name");
+        }
+    }
+}
+
+std::string prepare_table_name(const MediaCollection &collection){
+    std::string name = collection.get_name();
+    std::replace(name.begin(), name.end(), ' ', '_');
+    validate_table_name(name);
+    return name;
 }

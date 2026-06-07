@@ -1,12 +1,12 @@
-#include "../include/MediaCollection.h"
+#include "MediaCollection.h"
 
 // Constructor
-MediaCollection::MediaCollection(std::string name)
+MediaCollection::MediaCollection(const std::string &name)
 : name{name}{}
 
 std::string MediaCollection::get_name() const{
     return this->name;
   }
-  void MediaCollection::set_name(std::string name){
+  void MediaCollection::set_name(const std::string &name){
     this->name = name;
   }

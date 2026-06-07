@@ -14,14 +14,14 @@ protected:
 
 public:
   // Constructors
-  Movie(std::string title, int times_consumed=def_times_consumed, 
-    int user_rating=def_user_rating, std::string mpa_rating=def_mpa_rating);
+  Movie(const std::string &title, int times_consumed=def_times_consumed, 
+    int user_rating=def_user_rating, const std::string &mpa_rating=def_mpa_rating);
 
 
   // Getters and Setters
-  std::string get_mpa_rating() const;
+  const std::string &get_mpa_rating() const;
   int get_times_watched() const;
-  void set_mpa_rating(std::string mpa_rating);
+  void set_mpa_rating(const std::string &mpa_rating);
   void set_times_watched(int times_watched);
 
   // Custom Methods

@@ -1,30 +1,74 @@
-#include <iostream>
-#include "../include/BookCollection.h"
-#include "../include/Util.h"
-#include "../include/SQLQueryUtil.h"
+#include <gtest/gtest.h>
+#include "BookCollection.h"
+#include "Util.h"
 
-void book_functionality_test(DataBaseConnection &database){
+TEST(BookCollectionTest, EmptyCollection) {
+    BookCollection books("Test Collection");
+    EXPECT_EQ(books.get_books().size(), 0);
+}
+TEST(BookCollectionTest, AddToEmpty) {
+    BookCollection books("Test");
+    EXPECT_TRUE(books.add_book("Dune", 2, 5, "978-0441172719", "Science Fiction", "Space Opera", "Frank Herbert"));
+    EXPECT_EQ(books.get_books()[0].get_title(), "Dune");
+}
 
-    //std::string title, int times_read, int user_rating, std::string isbn, std::string genre, std::string sub_genre
-    BookCollection my_books("Book Collection");
-    my_books.display(); // Displaying empty library should return message
+TEST(BookCollectionTest, AddAtBeginning) {
+    BookCollection books("Test");
+    books.add_book("The Hobbit", 3, 5, "978-0547928227", "Fiction", "Fantasy", "J.R.R. Tolkien");
+    books.add_book("Brave New World", 1, 4, "978-0060850524", "Fiction", "Dystopian", "Aldous Huxley");
+    EXPECT_EQ(books.get_books()[0].get_title(), "Brave New World");
+}
 
-    add_book(my_books, "C++ Programming Language", 3, 5, "978-0321958327", "Non-fiction", "Instructional", "Bjarne Stroustrup");
-    my_books.display();
-    add_book(my_books, "Paradise Lost", 1, 4, "978-0140424393", "Fiction", "Epic Poem", "John Milton");
+TEST(BookCollectionTest, AddInMiddle) {
+    BookCollection books("Test");
+    books.add_book("Brave New World", 1, 4, "978-0060850524", "Fiction", "Dystopian", "Aldous Huxley");
+    books.add_book("The Hobbit", 3, 5, "978-0547928227", "Fiction", "Fantasy", "J.R.R. Tolkien");
+    books.add_book("Dune", 2, 5, "978-0441172719", "Science Fiction", "Space Opera", "Frank Herbert");
+    EXPECT_EQ(books.get_books()[1].get_title(), "Dune");
+}
 
-    my_books.display(); // Display Test_Book2 0 times watched
-    increment_read(my_books, "Paradise Lost");
-    my_books.display(); // Display Test_Book2 1 times watched
+TEST(BookCollectionTest, AddAtEnd) {
+    BookCollection books("Test");
+    books.add_book("Brave New World", 1, 4, "978-0060850524", "Fiction", "Dystopian", "Aldous Huxley");
+    books.add_book("The Hobbit", 3, 5, "978-0547928227", "Fiction", "Fantasy", "J.R.R. Tolkien");
+    EXPECT_EQ(books.get_books().back().get_title(), "The Hobbit");
+}
 
-    increment_read(my_books, "Test_Book6"); // Should return false
-    add_book(my_books, "The C Programming Language", 0, 5, "978-0131103627", "Non-fictional", "Instructional", "Brian W. Kernighan");
-    my_books.display();
-    add_book(my_books, "1984", 0, 2, "978-6257287401", "Fiction", "Dystopian Fiction","George Orwell");
-    my_books.display();
+TEST(BookCollectionTest, AddDuplicate) {
+    BookCollection books("Test Collection");
+    books.add_book("1984", 0, 2, "978-6257287401", "Fiction",
+        "Dystopian Fiction", "George Orwell");
+    EXPECT_FALSE(books.add_book("1984", 1, 3, "978-6257287401", "Fiction",
+        "Dystopian Fiction", "George Orwell"));
+    EXPECT_EQ(books.get_books().size(), 1);
+}
 
-    BookCollection my_books_deep_copy{my_books}; // Calls the deep copy constructor
-    std::cout << my_books_deep_copy.get_name() << std::endl;
+TEST(BookCollectionTest, IncrementRead) {
+    BookCollection books("Test Collection");
+    books.add_book("Paradise Lost", 1, 4,
+        "978-0140424393", "Fiction", "Epic Poem", "John Milton");
+    EXPECT_TRUE(books.increment_read("Paradise Lost"));
+    EXPECT_FALSE(books.increment_read("Test_Book6"));
+}
 
-    create_table(database, my_books);
+TEST(BookCollectionTest, LexicographicOrder) {
+    BookCollection books("Test Collection");
+    books.add_book("Paradise Lost", 1, 4, "978-0140424393", "Fiction", "Epic Poem", "John Milton");
+    books.add_book("1984", 0, 2, "978-6257287401", "Fiction", "Dystopian Fiction", "George Orwell");
+    books.add_book("C++ Programming Language", 3, 5, "978-0321958327", "Non-fiction", "Instructional", "Bjarne Stroustrup");
+    auto list = books.get_books();
+    EXPECT_EQ(list[0].get_title(), "1984");
+    EXPECT_EQ(list[1].get_title(), "C++ Programming Language");
+    EXPECT_EQ(list[2].get_title(), "Paradise Lost");
+}
+
+TEST(BookCollectionTest, DeepCopy) {
+    BookCollection books("Test Collection");
+    books.add_book("1984", 0, 2, "978-6257287401", "Fiction",
+        "Dystopian Fiction", "George Orwell");
+    BookCollection copy(books);
+    copy.add_book("Paradise Lost", 1, 4,
+        "978-0140424393", "Fiction", "Epic Poem", "John Milton");
+    EXPECT_EQ(books.get_books().size(), 1);
+    EXPECT_EQ(copy.get_books().size(), 2);
 }

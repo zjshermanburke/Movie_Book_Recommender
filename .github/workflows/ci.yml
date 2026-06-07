@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main, Development]
+  pull_request:
+    branches: [main, Development]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libpqxx-dev libgtest-dev
+
+      - name: Build
+        run: |
+          cd librarybuilder
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+
+      - name: Run unit tests
+        run: |
+          cd librarybuilder/build
+          ./tests --gtest_filter="-CollectionLoadingTest.*"
