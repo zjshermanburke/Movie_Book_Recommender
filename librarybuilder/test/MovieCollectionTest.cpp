@@ -1,35 +1,70 @@
-#include <iostream>
-#include "../include/MovieCollection.h"
-#include "../include/Util.h"
-#include "../include/SQLQueryUtil.h"
+#include <gtest/gtest.h>
+#include "MovieCollection.h"
+#include "Util.h"
 
-void movie_functionality_test(DataBaseConnection &database){
+TEST(MovieCollectionTest, EmptyCollection){
+    MovieCollection my_movies("Movie Collection");
+    EXPECT_EQ(my_movies.get_movies().size(), 0);
+}
 
-    MovieCollection my_movies("movie_collection");
-    my_movies.display(); // Displaying empty library should return message
+TEST(MovieCollectionTest, AddToEmpty) {
+    MovieCollection movies("Test");
+    EXPECT_TRUE(movies.add_movie("Inception", "PG-13", 2, 5));
+    EXPECT_EQ(movies.get_movies()[0].get_title(), "Inception");
+}
 
-    add_movie(my_movies, "Star Wars", "PG-13", 3, 4);
-    my_movies.display();
-    add_movie(my_movies, "Django", "R", 2, 5);
+TEST(MovieCollectionTest, AddAtBeginning) {
+    MovieCollection movies("Test");
+    movies.add_movie("The Matrix", "R", 3, 5);
+    movies.add_movie("Alien", "R", 1, 4);
+    EXPECT_EQ(movies.get_movies()[0].get_title(), "Alien");
+}
 
-    my_movies.display(); // Display Django 2 times watched
-    increment_watched(my_movies, "Django");
-    my_movies.display(); // Display Django 3 times watched
+TEST(MovieCollectionTest, AddInMiddle) {
+    MovieCollection movies("Test");
+    movies.add_movie("Alien", "R", 1, 4);
+    movies.add_movie("The Matrix", "R", 3, 5);
+    movies.add_movie("Gladiator", "R", 2, 4);
+    EXPECT_EQ(movies.get_movies()[1].get_title(), "Gladiator");
+}
 
-    increment_watched(my_movies, "Rocky"); // Should return false
-    add_movie(my_movies, "Django", "R", 15, 4); // Should return false
-    my_movies.display();
-    add_movie(my_movies, "Zoolander", "M", 1, 5);
-    my_movies.display();
-    add_movie(my_movies, "Apples", "PG-13", 0, 5);
-    my_movies.display();
+TEST(MovieCollectionTest, AddAtEnd) {
+    MovieCollection movies("Test");
+    movies.add_movie("Alien", "R", 1, 4);
+    movies.add_movie("The Matrix", "R", 3, 5);
+    EXPECT_EQ(movies.get_movies().back().get_title(), "The Matrix");
+}
 
-    MovieCollection my_movies_deep_copy{my_movies}; // Calls the deep copy constructor
+TEST(MovieCollectionTest, AddDuplicate) {
+    MovieCollection movies("Test Collection");
+    movies.add_movie("Django", "R", 2, 5);
+    EXPECT_FALSE(movies.add_movie("Django", "R", 15, 4));
+    EXPECT_EQ(movies.get_movies().size(), 1);
+}
 
-    my_movies_deep_copy.set_name("New Movie Collection");
+TEST(MovieCollectionTest, IncrementWatched) {
+    MovieCollection movies("Test Collection");
+    movies.add_movie("Django", "R", 2, 5);
+    EXPECT_TRUE(movies.increment_watched("Django"));
+    EXPECT_FALSE(movies.increment_watched("Rocky"));
+}
 
-    std::cout << "Original Movie Collection Name: " << my_movies.get_name() << std::endl;
-    std::cout << "Deep Copy Movie Collection Name: " << my_movies_deep_copy.get_name() << std::endl;
+TEST(MovieCollectionTest, LexicographicOrder) {
+    MovieCollection movies("Test Collection");
+    movies.add_movie("Zoolander", "M", 1, 5);
+    movies.add_movie("Apples", "PG-13", 0, 5);
+    movies.add_movie("Django", "R", 2, 5);
+    auto list = movies.get_movies();
+    EXPECT_EQ(list[0].get_title(), "Apples");
+    EXPECT_EQ(list[1].get_title(), "Django");
+    EXPECT_EQ(list[2].get_title(), "Zoolander");
+}
 
-    create_table(database, my_movies);
+TEST(MovieCollectionTest, DeepCopy) {
+    MovieCollection movies("Test Collection");
+    movies.add_movie("Star Wars", "PG-13", 3, 4);
+    MovieCollection copy(movies);
+    copy.add_movie("Django", "R", 2, 5);
+    EXPECT_EQ(movies.get_movies().size(), 1);
+    EXPECT_EQ(copy.get_movies().size(), 2);
 }

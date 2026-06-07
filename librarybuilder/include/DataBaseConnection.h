@@ -6,14 +6,15 @@
 
 class DataBaseConnection{
 private:
-    std::string connectionString = "dbname=movie_book_database user=postgres host=localhost password=password port=5432";
+    std::string connectionString;
 public:
     pqxx::connection* conn;
 
+    DataBaseConnection();
     void set_connection();
     void disconnect();
-    pqxx::result query(std::string strSQL);
-    std::string load_sql_query(std::string sql_file_path);
+    pqxx::result query(const std::string &strSQL);
+    std::string load_sql_query(const std::string &sql_file_path);
 
 };
 

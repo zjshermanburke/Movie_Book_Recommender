@@ -1,8 +1,8 @@
 #include <iostream>
-#include "../include/MovieCollection.h"
+#include "MovieCollection.h"
 
 // Constructor
-MovieCollection::MovieCollection(std::string name)
+MovieCollection::MovieCollection(const std::string &name)
 : MediaCollection{name}{
   movies = new std::vector<Movie>;
 }
@@ -11,18 +11,42 @@ MovieCollection::MovieCollection(const MovieCollection &source)
 : MediaCollection{source.get_name()}, movies{nullptr}{
   movies = new std::vector<Movie>{*(source.movies)};
 }
+// Copy Assignment Operator
+MovieCollection &MovieCollection::operator=(const MovieCollection &source){
+  if (this != &source){
+    delete movies;
+    movies = new std::vector<Movie>{*(source.movies)};
+    name = source.get_name();
+  }
+  return *this;
+}
+// Move Constructor
+MovieCollection::MovieCollection(MovieCollection &&source) noexcept
+: MediaCollection{std::move(source.name)}, movies{source.movies}{
+  source.movies = nullptr;
+}
+// Move Assignment Operator
+MovieCollection &MovieCollection::operator=(MovieCollection &&source) noexcept {
+  if (this != &source){
+    delete movies;
+    movies = source.movies;
+    source.movies = nullptr;
+    name = std::move(source.name);
+  }
+  return *this;
+}
 // Destructor
 MovieCollection::~MovieCollection(){
   delete movies;
 }
 
 // Getters and Setters
-std::vector<Movie> MovieCollection::get_movies() const{
+const std::vector<Movie>& MovieCollection::get_movies() const{
   return *movies;
 }
 
 // Add movie to collection
-bool MovieCollection::add_movie(std::string title, std::string mpa_rating, int times_watched, int rating){
+bool MovieCollection::add_movie(const std::string &title, const std::string &mpa_rating, int times_watched, int rating){
   // If movie is in collection, return false
   for (const Movie &movie : *movies){
     if (movie.get_title() == title){
@@ -52,7 +76,7 @@ bool MovieCollection::add_movie(std::string title, std::string mpa_rating, int t
 }
 
 // Increment watched time for a given movie
-bool MovieCollection::increment_watched(std::string title){
+bool MovieCollection::increment_watched(const std::string &title){
     for (Movie &movie : *movies){
         if (movie.get_title() == title){
             movie.increment_times_consumed();

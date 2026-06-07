@@ -1,8 +1,8 @@
 #include <iostream>
-#include "../include/BookCollection.h"
+#include "BookCollection.h"
 
 // Constructor
-BookCollection::BookCollection(std::string name)
+BookCollection::BookCollection(const std::string &name)
 : MediaCollection{name} {
   books = new std::vector<Book>;
 }
@@ -11,33 +11,57 @@ BookCollection::BookCollection(const BookCollection &source)
 : MediaCollection{source.name}, books{nullptr}{
   books = new std::vector<Book>{*(source.books)};
 }
+// Copy Assignment Operator
+BookCollection &BookCollection::operator=(const BookCollection &source){
+  if (this != &source){
+    delete books;
+    books = new std::vector<Book>{*(source.books)};
+    name = source.name;
+  }
+  return *this;
+}
+// Move Constructor
+BookCollection::BookCollection(BookCollection &&source) noexcept
+: MediaCollection{std::move(source.name)}, books{source.books}{
+  source.books = nullptr;
+}
+// Move Assignment Operator
+BookCollection &BookCollection::operator=(BookCollection &&source) noexcept{
+  if (this != &source){
+    delete books;
+    books = source.books;
+    source.books = nullptr;
+    name = std::move(source.name);
+  }
+  return *this;
+}
 // Destructor
 BookCollection::~BookCollection(){
   delete books;
 }
 
 // Getters and Setters
-std::vector<Book> BookCollection::get_books() const{
+const std::vector<Book>& BookCollection::get_books() const{
   return *books;
 }
 
-// Add movie to collection
-bool BookCollection::add_book(std::string title, int times_read, int user_rating, 
-  std::string isbn, std::string genre, std::string sub_genre, std::string author){
-  // If movie is in collection, return false
+// Add book to collection
+bool BookCollection::add_book(const std::string &title, int times_read, int user_rating, 
+  const std::string &isbn, const std::string &genre, const std::string &sub_genre, const std::string &author){
+  // If book is in collection, return false
   for (const Book &book : *books){
     if (book.get_title() == title){
       return false;
     }
   }
-  // Create temporary movie object
+  // Create temporary book object
   Book temp {title, times_read, user_rating, isbn, genre, sub_genre, author};
   if ((*books).empty()){
     (*books).insert((*books).begin(), temp);
     return true;
   }
 
-  // For loop to place movie in collection, in Lexigraphical Order
+  // For loop to place book in collection, in Lexigraphical Order
   for (int i = 0; i < (*books).size(); i++){
     if(temp < (*books).at(0)){
       (*books).insert((*books).begin(), temp);
@@ -53,8 +77,8 @@ bool BookCollection::add_book(std::string title, int times_read, int user_rating
   return false;
 }
 
-// Increment watched time for a given movie
-bool BookCollection::increment_read(std::string title){
+// Increment read time for a given book
+bool BookCollection::increment_read(const std::string &title){
     for (Book &book : *books){
         if (book.get_title() == title){
             book.increment_read();
@@ -64,7 +88,7 @@ bool BookCollection::increment_read(std::string title){
     return false;
 }
 
-// Display movie collection
+// Display book collection
 void BookCollection::display() const{
     if ((*books).size() == 0){
         std::cout << "Sorry, no books to display\n" << std::endl;

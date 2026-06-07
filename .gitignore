@@ -1,3 +1,6 @@
 scrapwork/*
 recommendermodel/.venv/*
 recommendermodel/Data/title.basics.tsv.gz
+librarybuilder/build/main
+recommendermodel/src/__pycache__/*
+*.pyc

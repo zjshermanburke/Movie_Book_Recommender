@@ -12,7 +12,7 @@ protected:
     int user_rating;
 public:
     // Constructors
-    Media(std::string title, int times_consumed=def_times_consumed, int user_rating=def_user_rating);
+    Media(const std::string &title, int times_consumed=def_times_consumed, int user_rating=def_user_rating);
 
     // Operator Overloading 
     bool operator==(const Media &rhs) const;
@@ -20,10 +20,10 @@ public:
     bool operator>(const Media &rhs) const;
 
     // Getters and Setters
-    std::string get_title() const;
+    const std::string &get_title() const;
     int get_times_consumed() const;
     int get_user_rating() const;
-    void set_title(std::string title);
+    void set_title(const std::string &title);
     void set_times_consumed(int times_consumed);
     void set_user_rating(int rating);
 

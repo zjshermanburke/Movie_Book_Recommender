@@ -7,13 +7,13 @@ protected:
     std::string name;
 public:
     // Constructor
-    MediaCollection(std::string name);
+    MediaCollection(const std::string &name);
     // Destructor
     virtual ~MediaCollection(){}
 
 // Getters and Setters
   std::string get_name() const;
-  void set_name(std::string name);
+  void set_name(const std::string &name);
 
   virtual void display() const = 0;
 
